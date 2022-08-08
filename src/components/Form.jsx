@@ -12,7 +12,7 @@ const initialSongs = [
   },
 ];
 
-function Form() {
+export default function Form() {
   const [list, setList] = useState(initialSongs);
   const [song, setSong] = React.useState('');
 
@@ -24,23 +24,30 @@ function Form() {
     const newSong = list.concat({ song, id: uuidv4() });
     setList(newSong);
     setSong('');
+    console.log(newSong);
   }
 
   return (
     <div>
-      <div>
-        <input type="text" value={song} onChange={handleChange} />
-        <button type="button" onClick={handleAdd}>
-          Add
-        </button>
-      </div>
-      <ul>
-        {list.map((item) => (
-          <li key={item.id}>{item.song}</li>
-        ))}
-      </ul>
+      <AddItem song={song} onChange={handleChange} onAdd={handleAdd} />
+      <List list={list} />
     </div>
   );
 }
 
-export default Form;
+const AddItem = ({ song, onChange, onAdd }) => (
+  <div>
+    <input type="text" value={song} onChange={onChange} />
+    <button type="button" onClick={onAdd}>
+      Add
+    </button>
+  </div>
+);
+
+const List = ({ list }) => (
+  <ul>
+    {list.map((item) => (
+      <li key={item.id}>{item.song}</li>
+    ))}
+  </ul>
+);

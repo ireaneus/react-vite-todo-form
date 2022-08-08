@@ -1,25 +1,44 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
+const initialSongs = [
+  {
+    id: 1,
+    song: 'Petra Praise',
+  },
+  {
+    id: 2,
+    song: 'The Rock cries out',
+  },
+];
 
 function Form() {
-  const [text, setText] = useState('');
+  const [list, setList] = useState(initialSongs);
+  const [song, setSong] = React.useState('');
 
-  const onInputChange = (event) => {
-    setText(event.target.value);
-  };
+  function handleChange(event) {
+    setSong(event.target.value);
+  }
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-    console.log(text);
-  };
+  function handleAdd() {
+    const newSong = list.concat({ song, id: uuidv4() });
+    setList(newSong);
+    setSong('');
+  }
 
   return (
     <div>
-      <p>{text.length > 0 ? 'Petra album Songs' : 'No songs listed'}</p>
-      <p>{text}</p>
-      <form autoComplete="off" onSubmit={onSubmit}>
-        <input type="text" value={text} onChange={onInputChange} />
-        <button type="submit">Add Song </button>
-      </form>
+      <div>
+        <input type="text" value={song} onChange={handleChange} />
+        <button type="button" onClick={handleAdd}>
+          Add
+        </button>
+      </div>
+      <ul>
+        {list.map((item) => (
+          <li key={item.id}>{item.song}</li>
+        ))}
+      </ul>
     </div>
   );
 }
